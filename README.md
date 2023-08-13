@@ -6,7 +6,16 @@ This repository contains a Django web application with user authentication capab
 ## Table of Contents
 - [Setting Up the Django App](#setting-up-the-django-app)
 - [Configuring Authentication](#configuring-authentication)
-- [Deploying to Firebase](#deploying-to-firebase)
+- [Containerize and Deploy to Firebase](#deploying-to-firebase)
+
+![djangoImg](django1.png)
+![djangoImg](django3.png)
+![djangoImg](django2.png)
+![djangoImg](wrongPass.png)
+![djangoImg](success.png)
+
+
+
 
 ## Setting Up the Django App
 
@@ -97,7 +106,52 @@ python manage.py runserver --nothreading --noreload
 
 3. **Templates**: The templates directory contains HTML files for login (`login.html`) and registration (`register.html`). Ensure they're linked correctly with the corresponding views.
 
+
+Now, hosting a Django app on Firebase requires a few additional steps, since Firebase Hosting is typically used for static websites. However, with the use of Cloud Functions or Cloud Run, we can deploy Django apps.
+
 ## Deploying to Firebase
+
+### Containerize Your Django App:
+**Docker**
+Create a Dockerfile in your Django project root.
+Sample Dockerfile:
+```
+FROM python:3.8-slim
+
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+CMD ["gunicorn", "your_project_name.wsgi:application", "--bind", "0.0.0.0:8000"]
+```
+Build the Docker image:
+``` docker build -t your_image_name .```
+
+Push Your Docker Image to Google Container Registry (GCR):
+- Configure gcloud:
+
+Install the Google Cloud SDK.
+Authenticate with Google Cloud: gcloud auth login
+Set your Google Cloud project: gcloud config set project your_project_id
+
+- Push to GCR:
+
+Tag your image: docker tag your_image_name gcr.io/your_project_id/your_image_name
+Push to GCR: docker push gcr.io/your_project_id/your_image_name
+
+- Deploy to Cloud Run:
+
+Deploy:
+
+Deploy your container:
+ ```
+ gcloud run deploy --image 
+ gcr.io/your_project_id/your_image_name --platform managed
+ ```
+
+Run: 
+
+### Firebase:
 
 1. **Install Firebase CLI**: 
    ```
@@ -121,7 +175,7 @@ python manage.py runserver --nothreading --noreload
 
 5. **Deploy to Firebase**:
    ```
-   firebase deploy
+   firebase deploy --only hosting
    ```
 
-That's it! Your Django application with user authentication should now be live on Firebase Hosting.
+And there you have it! Your Django app should now be hosted on Firebase using Google Cloud Run. Remember, Firebase billing and Google Cloud Platform billing are separate, so keep an eye on your usage to avoid unexpected charges.
