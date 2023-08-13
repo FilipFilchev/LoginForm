@@ -1,6 +1,4 @@
-npx create-next-app next-login-form --use-npm
-cd next-login-form
------------------------------------
+
 DJAGNO
 
 PATH error with django => python -m django startproject django
