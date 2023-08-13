@@ -9,8 +9,8 @@ This repository contains a Django web application with user authentication capab
 - [Containerize and Deploy to Firebase](#deploying-to-firebase)
 
 ![djangoImg](django1.png)
-![djangoImg](django3.png)
-![djangoImg](django2.png)
+![djangoImg](django3.PNG)
+![djangoImg](django2.PNG)
 ![djangoImg](wrongPass.png)
 ![djangoImg](success.png)
 
